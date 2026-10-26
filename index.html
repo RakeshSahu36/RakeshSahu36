@@ -482,7 +482,6 @@
         </div>
     </header>
 
-    <!-- 7 NAV TABS AS REQUESTED -->
     <nav>
         <button class="nav-btn active" onclick="openTab('home', this)">Home</button>
         <button class="nav-btn" onclick="openTab('bio-sketch', this)">Bio-Sketch</button>
@@ -623,7 +622,9 @@
         }
 
         function parseCSV(text) {
-            const lines = text.split('\n');
+            const lines = text.split(/
+?
+/);
             return lines.map(line => {
                 const values = [];
                 let current = '';
@@ -650,7 +651,7 @@
         async function fetchTabData(tabName) {
             try {
                 const cacheBuster = new Date().getTime();
-                const url = `https://docs.google.com/spreadsheets/d/1_PUvlY425eXoDVHDTCGNhUmFfHARiAWVGeM9288g8E8/edit?gid=273260786#gid=273260786`;
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}&_=${cacheBuster}`;
                 const response = await fetch(url, { cache: 'no-store' });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const text = await response.text();
